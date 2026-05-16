@@ -1,5 +1,3 @@
-# Smart-kitchen-prompts
-Quản lý Context Engineering, Agent Skills, và tất cả file .md Ai trong team cũng có thể đóng góp. Không chứa code chạy được.
 # 🍳 Smart Kitchen Prompts
 
 > **Context Engineering Repository** — Não bộ của hệ thống Multi-Agent Smart Kitchen VN.
