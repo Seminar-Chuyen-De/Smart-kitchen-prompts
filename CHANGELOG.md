@@ -4,6 +4,74 @@
 
 ---
 
+## [0.4.0] — 2026-05-18 — feat: P0-2 + P1 Core Features UI hoàn chỉnh
+
+### 🎨 Frontend Layer — [AGENT-UI]
+
+**Mục tiêu**: Xây dựng toàn bộ giao diện (UI layer) cho Dashboard, AI Scan Flow, Recipe CRUD và Cookbook Management. Tất cả tuân thủ STRICT 3-FOLDER RULE — `app/` chỉ là routing shells siêu mỏng, toàn bộ UI nằm trong `Frontend/`.
+
+**Dependency đã cài thêm:** `lucide-react` (icons)
+
+#### P0-2 · Dashboard Layout & Route
+
+| File | Mô tả |
+|---|---|
+| `Frontend/components/layout/Navbar.tsx` | Fixed navbar: logo, nav links có active state, UserButton Clerk, hamburger mobile |
+| `Frontend/components/layout/Sidebar.tsx` | Mobile slide-in sidebar tích hợp trong Navbar |
+| `app/dashboard/layout.tsx` | Clerk `auth()` guard + Navbar wrapper |
+| `app/dashboard/page.tsx` | Thin shell → `DashboardPage` |
+| `Frontend/components/pages/DashboardPage.tsx` | Stat cards (recipes/cookbooks/scan), Quick Actions, Recent Recipes grid, Skeleton loading |
+
+#### P1-1 · AI Scan Flow UI
+
+| File | Mô tả |
+|---|---|
+| `Frontend/hooks/useScan.ts` | State machine: idle → uploading → scanning → done/error. Gọi `POST /api/scan` |
+| `Frontend/components/ai/ImageUploader.tsx` | Drag & drop zone, file preview, progress bar animation, status messages |
+| `Frontend/components/ai/ScanResultCard.tsx` | Hiển thị recipe AI: badge, ingredients chips, steps preview, nút Lưu/Scan lại. Export `ScanResultSkeleton` |
+| `Frontend/components/pages/ScanPage.tsx` | Layout 2 cột (uploader \| result), How-it-works guide, error state |
+| `app/dashboard/scan/page.tsx` | Thin shell → `ScanPage` |
+
+#### P1-2 · Recipe CRUD UI
+
+| File | Mô tả |
+|---|---|
+| `Frontend/hooks/useRecipes.ts` | Types đầy đủ (Recipe, Step, Tag, Ingredient), CRUD với optimistic updates, mock data cho dev |
+| `Frontend/components/recipe/RecipeCard.tsx` | Card: image/fallback, source badge, hover actions (edit/delete/cookbook), tags. Export `RecipeCardSkeleton` |
+| `Frontend/components/recipe/RecipeList.tsx` | Grid/List toggle view, skeleton loading (6 cards), empty state với CTA |
+| `Frontend/components/recipe/RecipeDetail.tsx` | Full view: hero image, nutrition grid (4 cards), ingredients, numbered steps, tags. Export `RecipeDetailSkeleton` |
+| `Frontend/components/recipe/RecipeForm.tsx` | Form tạo/sửa: dynamic ingredient rows, step list, nutrition fields, image URL preview |
+| `Frontend/components/pages/RecipesPage.tsx` | Search bar + source filter, delete confirmation dialog, dùng `useRecipes` |
+| `Frontend/components/pages/RecipeDetailPage.tsx` | Fetch by ID, loading/error states, mock data fallback |
+| `app/dashboard/recipes/page.tsx` | Thin shell → `RecipesPage` |
+| `app/dashboard/recipes/[id]/page.tsx` | Thin shell → `RecipeDetailPage` |
+| `app/dashboard/recipes/new/page.tsx` | Full page: dùng `RecipeForm`, xử lý create & redirect |
+
+#### P1-3 · Cookbook Management UI
+
+| File | Mô tả |
+|---|---|
+| `Frontend/hooks/useCookbooks.ts` | Cookbook type + CRUD + addRecipe/removeRecipe, optimistic updates, mock data |
+| `Frontend/components/cookbook/CookbookCard.tsx` | Card: mosaic image preview hoặc icon, recipe count, hover edit/delete. Export `CookbookCardSkeleton` |
+| `Frontend/components/cookbook/CookbookList.tsx` | Grid với skeleton (3 cards), empty state |
+| `Frontend/components/cookbook/CookbookDetail.tsx` | Inline name edit, add-recipe search modal, remove recipe per card, delete cookbook confirm |
+| `Frontend/components/pages/CookbooksPage.tsx` | Inline create form, edit-name modal, delete confirm |
+| `app/dashboard/cookbooks/page.tsx` | Thin shell → `CookbooksPage` |
+| `app/dashboard/cookbooks/[id]/page.tsx` | Thin shell → `CookbookDetail` |
+
+### 📋 Prompt Engineering
+
+- Thêm `prompts/p1-ui-core-features.md` — Actionable Prompt đầy đủ cho [AGENT-UI] bao gồm spec chi tiết từng component, constraints, và thứ tự thực hiện.
+
+### ✅ Verification
+
+- `npx tsc --noEmit` → **0 errors**
+- Dev server `npm run dev` → **Ready in 2.6s**
+- `/dashboard` → Clerk auth guard hoạt động, redirect sign-in ✅
+- Tất cả routes render đúng với mock data ✅
+
+---
+
 ## [0.3.0] — 2026-05-16 — Documentation: README.md chi tiết & chuyên nghiệp
 
 ### 📖 README.md Authored
