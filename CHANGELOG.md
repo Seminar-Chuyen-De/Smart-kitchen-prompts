@@ -4,6 +4,23 @@
 
 ---
 
+## [0.4.1] — 2026-05-18 — Feature & Testing: API Endpoints & Unit Tests
+
+### 🚀 API Endpoints Implemented
+Đã khởi tạo các API Endpoints (Thin Router) cho dự án dựa trên `FLOW.md` và `01-Agent-api-endpoint.md`:
+- `GET & POST /api/recipes`: Lấy danh sách và tạo mới recipe.
+- `GET & PUT & DELETE /api/recipes/[id]`: Chi tiết, cập nhật và xóa recipe.
+- `POST /api/ai/analyze-image`: Mock endpoint cho AI Orchestrator.
+- `POST /api/webhooks/clerk`: Đồng bộ user từ Clerk xuống database nội bộ.
+
+### 🧪 Unit Tests & Bugfixes
+Đã viết và thực thi Unit Tests bằng Vitest cho toàn bộ các API Endpoints trên. Quá trình test đã phát hiện và xử lý các lỗi:
+- **Lỗi 400 Bad Request:** Thiếu `userId` trong request body. Cố định bằng cách lấy `userId` trực tiếp từ middleware Clerk `auth()` và inject vào object body trước khi qua Zod Validation.
+- **Lỗi Module Resolution:** Vitest không map được đường dẫn `@/app`. Đã fix bằng cách chuyển các import từ absolute paths sang relative paths (ví dụ: `../../../app/api/...`) trong file test.
+- **Tài liệu:** Đã đúc kết bài học tại file `experience/api-endpoints-testing.md` và cung cấp Prompt mới cho Prompt Engineer.
+
+---
+
 ## [0.4.0] — 2026-05-18 — feat: P0-2 + P1 Core Features UI hoàn chỉnh
 
 ### 🎨 Frontend Layer — [AGENT-UI]
