@@ -4,6 +4,45 @@
 
 ---
 
+## [0.4.3] — 2026-05-18 — Feature & Testing: Search Recipes & User Profile (P2-3, P2-4)
+
+### 🔍 Backend Layer — Search & Filter Recipes (P2-3)
+- Cập nhật `Backend/services/recipe.service.ts` thêm `searchRecipes(userId, query, source, cookbookId)` hỗ trợ full-text search (insensitive) và filter.
+- Cập nhật `app/api/recipes/route.ts` xử lý `NextRequest` để trích xuất URL Search Params.
+
+### 👤 Backend Layer — User Profile (P2-4)
+- Bổ sung `Backend/schemas/user.schema.ts` với `CreateUserSchema` và `UpdateUserSchema`.
+- Cập nhật `Backend/services/user.service.ts` thêm hàm `getUserById` và `updateUser`.
+- Tạo mới API Endpoint `app/api/user/profile/route.ts` hỗ trợ GET và PUT profile.
+
+### 🧪 Unit Tests
+- Viết mới `__test__/unit/api/user-profile.test.ts` gồm 6 test cases bắt tất cả các kịch bản lỗi 401, 404, 400 và success 200.
+- Sửa lại các mock trong `recipes.test.ts` để tương thích với `NextRequest` và `searchRecipes`.
+- Tổng cộng 28/28 tests passed. Kết quả đã lưu tại `experience/api-test-results-p2.md`.
+
+
+## [0.4.2] — 2026-05-18 — Feature & Testing: Cookbook Backend Layer & Tests
+
+### 📚 Backend Layer — Cookbook Management
+- Hoàn thành `Backend/schemas/cookbook.schema.ts` với `CreateCookbookSchema` và `UpdateCookbookSchema`.
+- Viết `Backend/services/cookbook.service.ts` chứa các hàm xử lý dữ liệu cho Cookbook (CRUD, và Thêm/Xoá Recipe khỏi Cookbook) kèm với xác thực quyền sở hữu (`userId`).
+
+### 🧪 Unit Tests cho Cookbook Service
+- Hoàn thành bộ unit test cho `cookbook.service.ts` tại `Backend/__test__/unit/services/cookbook.service.test.ts`.
+- Bổ sung cấu hình `vitest.config.ts` để Vitest có thể nhận diện path alias (e.g. `@/backend/`).
+- Tổng cộng 11 test cases đã **PASS**.
+
+### 🌐 API Layer — Cookbook Management
+- Xây dựng các API Routes: `GET/POST /api/cookbooks`, `GET/PUT/DELETE /api/cookbooks/[id]`, và `POST/DELETE /api/cookbooks/[id]/recipes`.
+- Tuân thủ kiến trúc Thin Router, tái sử dụng `CreateCookbookSchema` hiệu quả (không yêu cầu `userId` từ body, tự inject từ Clerk `auth()`).
+
+### 🧪 Unit Tests cho Cookbook API
+- Viết 13 test cases cho 3 API Endpoints của Cookbook.
+- Cover đầy đủ status codes (200, 201, 400, 401, 404).
+- Cải thiện thiết kế API: Hỗ trợ linh hoạt đọc tham số `recipeId` thông qua `JSON body` hoặc `searchParams` cho method `DELETE`.
+
+---
+
 ## [0.4.1] — 2026-05-18 — Feature & Testing: API Endpoints & Unit Tests
 
 ### 🚀 API Endpoints Implemented
