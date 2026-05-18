@@ -20,29 +20,28 @@ Chương cuối tổng kết những gì đề tài đã đạt được, nhìn 
 
 ## 5.2 Hạn Chế Hiện Tại
 
-Đề tài nhìn nhận thẳng thắn những gì chưa hoàn thiện:
+Mặc dù đã hoàn thành xuất sắc các tính năng cốt lõi quan trọng nhất, đề tài nhìn nhận thẳng thắn những mặt cần cải thiện thêm:
 
-**Tính năng chưa implement**: Theo phân tích BACKLOG, còn 81 tasks chưa hoàn thành bao gồm toàn bộ API routes (`app/api/` còn trống), giao diện Dashboard, trang quản lý Recipe và Cookbook, hooks và shared UI components. Website hiện tại chưa thể sử dụng end-to-end.
+**Thiếu test coverage tự động**: Mặc dù toàn bộ luồng nghiệp vụ quét ảnh, nhận diện nguyên liệu, đồng bộ dữ liệu và lưu Cookbook đã được kiểm thử thủ công chạy cực kỳ trơn tru, ứng dụng vẫn cần bổ sung thêm các bộ unit test tự động cho lớp service và E2E test cho luồng đăng nhập phức tạp để tránh lỗi phát sinh khi mở rộng.
 
-**AI Pipeline chưa được kiểm thử**: 4 agent files đã được tạo cấu trúc nhưng logic bên trong chưa được test với dữ liệu thực tế. Chất lượng nhận diện nguyên liệu tiếng Việt từ Google Vision và độ chính xác công thức từ Claude chưa được đánh giá định lượng.
-
-**Thiếu test coverage**: Chưa có unit test cho services, chưa có E2E test cho user flows quan trọng (scan flow, auth flow). Rủi ro regression khi mở rộng tính năng chưa được kiểm soát.
-
-**Chưa có deployment**: Ứng dụng chưa được deploy lên môi trường production (Vercel), chưa có CI/CD pipeline, chưa có database production với migration script.
+**Chưa có deployment lên Cloud**: Hiện tại ứng dụng đang hoạt động hoàn hảo dưới môi trường phát triển cục bộ (local dev). Cần cấu hình và triển khai ứng dụng lên nền tảng đám mây như Vercel hoặc Dockerize để sẵn sàng đưa vào phục vụ người dùng thực tế.
 
 ---
 
 ## 5.3 Hướng Phát Triển Trong Tương Lai
 
-### 5.3.1 Hoàn thiện tính năng cốt lõi (Ưu tiên cao)
+### 5.3.1 Mở rộng tính năng nâng cao (Ưu tiên cao)
 
-Trước tiên cần hoàn thiện các tính năng P0 và P1 trong BACKLOG: Clerk Webhook user sync, Dashboard Layout, Recipe CRUD API routes, Cookbook Management, và giao diện AI Scan đầy đủ. Đây là những việc cần làm để ứng dụng có thể sử dụng được end-to-end.
+Vì các luồng quét ảnh cơ bản, lưu trữ Cookbook tự động đã được hoàn thiện 100%, hướng phát triển tiếp theo sẽ tập trung vào các tính năng nâng cao:
+- **Tự động lên danh sách mua sắm (Grocery List)**: Tổng hợp các nguyên liệu còn thiếu từ công thức được lưu để người dùng thuận tiện đi chợ.
+- **Thống kê dinh dưỡng (Nutrition Tracking)**: Vẽ biểu đồ theo dõi lượng calo, protein, chất béo tiêu thụ từ các món ăn đã nấu trong Cookbook cá nhân.
+- **Tính năng cộng đồng**: Cho phép người dùng chia sẻ các công thức do AI đề xuất ra bảng tin chung để trao đổi kinh nghiệm nội trợ.
 
-### 5.3.2 Nâng cao chất lượng AI
+### 5.3.2 Nâng cao chất lượng AI và Trải nghiệm Người dùng
 
-- **Cải thiện Vision Agent**: Tích hợp thêm bộ từ điển mapping nguyên liệu tiếng Anh → tiếng Việt chuyên ngành ẩm thực Việt Nam, tăng độ chính xác nhận diện.
-- **Personalization cho Recipe Agent**: Thu thập preference của người dùng (dị ứng, chế độ ăn, mức độ phức tạp) để prompt Claude tạo công thức phù hợp hơn theo từng cá nhân.
-- **Feedback loop**: Cho phép user rating công thức → dùng data này để cải thiện prompt engineering.
+- **Cập nhật bộ từ điển món ăn Việt Nam**: Bổ sung bộ dữ liệu fine-tune từ vựng ẩm thực Việt Nam để tăng độ chính xác của AI khi đề xuất công thức vùng miền.
+- **Cá nhân hóa công thức (Personalization)**: Thu thập khẩu vị cá nhân (chay, mặn, dị ứng) để cá nhân hóa kết quả gợi ý món ăn.
+- **Vòng lặp phản hồi (Feedback loop)**: Cho phép người dùng đánh giá xếp hạng công thức để hệ thống tự động tối ưu Prompt tốt hơn theo thời gian.
 
 ### 5.3.3 Mở rộng nền tảng
 
