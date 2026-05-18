@@ -206,24 +206,24 @@
 
 **Dependency**: P0-2
 
-- [ ] **[AGENT-UI]** Tạo `Frontend/components/ui/Toast.tsx` — Notification system
-- [ ] **[AGENT-UI]** Tạo `Frontend/components/ui/Modal.tsx` — Reusable modal/dialog
-- [ ] **[AGENT-UI]** Tạo `Frontend/components/ui/Skeleton.tsx` — Loading skeleton
-- [ ] **[AGENT-UI]** Tạo `Frontend/components/ui/Button.tsx` — Unified button variants
-- [ ] **[AGENT-UI]** Tạo `Frontend/components/ui/Badge.tsx` — Source type badge (AI/Manual)
-- [ ] **[AGENT-UI]** Tạo `Frontend/components/ui/EmptyState.tsx` — Empty state placeholder
-- [ ] **[AGENT-UI]** Tạo `Frontend/contexts/ToastContext.tsx` — Global toast state
+- [x] **[AGENT-UI]** Tạo `Frontend/components/ui/Toast.tsx` — Notification system
+- [x] **[AGENT-UI]** Tạo `Frontend/components/ui/Modal.tsx` — Reusable modal/dialog
+- [x] **[AGENT-UI]** Tạo `Frontend/components/ui/Skeleton.tsx` — Loading skeleton
+- [x] **[AGENT-UI]** Tạo `Frontend/components/ui/Button.tsx` — Unified button variants
+- [x] **[AGENT-UI]** Tạo `Frontend/components/ui/Badge.tsx` — Source type badge (AI/Manual)
+- [x] **[AGENT-UI]** Tạo `Frontend/components/ui/EmptyState.tsx` — Empty state placeholder
+- [x] **[AGENT-UI]** Tạo `Frontend/contexts/ToastContext.tsx` — Global toast state
 
 ### P2-2 · Error Handling & Loading States
 
 **Dependency**: P1-1, P1-2, P1-3
 
-- [ ] **[AGENT-UI]** Tạo `app/error.tsx` — Global error boundary
-- [ ] **[AGENT-UI]** Tạo `app/not-found.tsx` — 404 page
-- [ ] **[AGENT-UI]** Tạo `app/loading.tsx` — Global loading page
-- [ ] **[AGENT-API]** Tạo `Backend/middleware/error-handler.ts`:
+- [x] **[AGENT-UI]** Tạo `app/error.tsx` — Global error boundary
+- [x] **[AGENT-UI]** Tạo `app/not-found.tsx` — 404 page
+- [x] **[AGENT-UI]** Tạo `app/loading.tsx` — Global loading page
+- [x] **[AGENT-API]** Tạo `Backend/middleware/error-handler.ts`:
   - Chuẩn hóa format error response: `{ error: string, code: string }`
-- [ ] **[AGENT-API]** Tạo `Backend/constants/error-codes.ts`:
+- [x] **[AGENT-API]** Tạo `Backend/constants/error-codes.ts`:
   - Enum các error code: `UNAUTHORIZED`, `NOT_FOUND`, `VALIDATION_ERROR`, etc.
 
 ### P2-3 · Search & Filter Recipes
@@ -243,8 +243,8 @@
 **Dependency**: P0-1
 
 - [ ] **[AGENT-API]** Tạo `app/api/user/profile/route.ts` (GET, PUT)
-- [ ] **[AGENT-UI]** Tạo `Frontend/components/pages/ProfilePage.tsx`
-- [ ] **[AGENT-UI]** Tạo `app/dashboard/profile/page.tsx`
+- [x] **[AGENT-UI]** Tạo `Frontend/components/pages/ProfilePage.tsx`
+- [x] **[AGENT-UI]** Tạo `app/dashboard/profile/page.tsx`
 
 ---
 
