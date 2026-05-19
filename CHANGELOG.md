@@ -4,6 +4,133 @@
 
 ---
 
+## [0.5.0] — 2026-05-18 — feat: P2 UX Enhancement — Shared UI, Error Pages, Profile
+
+### 🔀 Git Workflow — [AGENT-GIT-WORKFLOW]
+
+**Mục tiêu**: Hợp nhất toàn bộ công việc đã làm trên các nhánh riêng lẻ vào một nhánh chức năng mới trước khi bắt đầu P2.
+
+| Nhánh nguồn | Nhánh đích | Nội dung |
+|---|---|---|
+| `origin/feature/database-schema` | `feature/p2-ux-enhancement` | DB schema, Zod schemas, seed, service layer |
+| `origin/feature/api-endpoints-tests` | `feature/p2-ux-enhancement` | API routes, unit tests, user.service |
+| `origin/feature/p0-p1-core-ui` | `feature/p2-ux-enhancement` | Toàn bộ P0-2 + P1 UI components |
+
+**Bonus fix**: Cập nhật `.gitignore` để loại `.next/`, `tsconfig.tsbuildinfo` và các build artifacts khỏi git tracking.
+
+---
+
+### 🎨 P2-1 · Shared UI Components — [AGENT-UI]
+
+**Mục tiêu**: Xây dựng bộ primitive UI components tái sử dụng làm nền tảng cho toàn bộ dashboard.
+
+| File | Mô tả |
+|---|---|
+| `Frontend/components/ui/Button.tsx` | 4 variants (primary/secondary/ghost/danger), 3 sizes, `isLoading` spinner, `leftIcon`/`rightIcon`, `forwardRef` |
+| `Frontend/components/ui/Badge.tsx` | 5 variants: `ai` (violet), `manual` (blue), `pending` (amber), `success` (green), `error` (red) |
+| `Frontend/components/ui/Skeleton.tsx` | 3 variants: `text`, `card`, `avatar` — animation pulse, prop `count` để render nhiều |
+| `Frontend/components/ui/EmptyState.tsx` | Icon + title + description + optional `action` button |
+| `Frontend/components/ui/Modal.tsx` | Backdrop blur, đóng bằng ESC/click-outside, 4 sizes (sm/md/lg/full), `aria-modal` |
+| `Frontend/components/ui/Toast.tsx` | Fixed bottom-right, slide-in animation, 4 loại có màu riêng, nút dismiss |
+| `Frontend/contexts/ToastContext.tsx` | `useReducer` state, auto-remove sau 4000ms, export `useToast()` hook và `ToastProvider` |
+
+**Tích hợp**: `app/dashboard/layout.tsx` được cập nhật để bọc `ToastProvider` + render `ToastContainer`.
+
+---
+
+### 🛡️ P2-2 · Error Handling & Loading States — [AGENT-UI]
+
+**Mục tiêu**: Cung cấp UX nhất quán khi xảy ra lỗi hoặc đang tải dữ liệu ở cấp ứng dụng.
+
+| File | Mô tả |
+|---|---|
+| `app/loading.tsx` | Global loading skeleton với thương hiệu Smart Kitchen (icon 🍳 + Skeleton component) |
+| `app/not-found.tsx` | 404 page: `UtensilsCrossed` icon, text "404", 2 navigation buttons (Dashboard / Trang chủ) |
+| `app/error.tsx` | Next.js Error Boundary (`'use client'`): nhận `error.digest`, nút "Thử lại" gọi `reset()` |
+
+---
+
+### 👤 P2-4 · User Profile Page — [AGENT-UI]
+
+**Mục tiêu**: Trang hồ sơ người dùng dùng dữ liệu từ Clerk, với stat cards và modal chỉnh sửa.
+
+| File | Mô tả |
+|---|---|
+| `Frontend/components/pages/ProfilePage.tsx` | Dùng `useUser()` Clerk: avatar, tên, email, ngày tham gia, stat cards (recipe/cookbook), edit Modal |
+| `app/dashboard/profile/page.tsx` | Thin shell + `export const metadata` |
+
+> **Ghi chú**: Stat cards hiển thị giá trị `0` với comment `// TODO: fetch từ /api/user/profile`. Form edit chưa submit API — chờ P2-4 API layer.
+
+---
+
+### 📋 Prompt Engineering
+
+- Thêm `prompts/p2-ux-enhancement-ui.md` — Actionable Prompt theo format `06-Agent-prompt.md`, gồm 2 phần:
+  - **PHẦN 1** — `[AGENT-UI]`: 3 bước thực thi với spec chi tiết từng component
+  - **PHẦN 2** — `[AGENT-GIT-WORKFLOW]`: Script merge 3 nhánh + script push cuối
+
+### ✅ Verification
+
+- Dev server `npm run dev` → **Chạy thành công**
+- `app/error.tsx`, `app/loading.tsx`, `app/not-found.tsx` → hiển thị trong `.next/app-build-manifest.json` ✅
+- `/dashboard/profile` → route render đúng với Clerk user data ✅
+- `ToastProvider` + `ToastContainer` tích hợp vào dashboard layout ✅
+## [0.4.3] — 2026-05-18 — Feature & Testing: Search Recipes & User Profile (P2-3, P2-4)
+
+### 🔍 Backend Layer — Search & Filter Recipes (P2-3)
+- Cập nhật `Backend/services/recipe.service.ts` thêm `searchRecipes(userId, query, source, cookbookId)` hỗ trợ full-text search (insensitive) và filter.
+- Cập nhật `app/api/recipes/route.ts` xử lý `NextRequest` để trích xuất URL Search Params.
+
+### 👤 Backend Layer — User Profile (P2-4)
+- Bổ sung `Backend/schemas/user.schema.ts` với `CreateUserSchema` và `UpdateUserSchema`.
+- Cập nhật `Backend/services/user.service.ts` thêm hàm `getUserById` và `updateUser`.
+- Tạo mới API Endpoint `app/api/user/profile/route.ts` hỗ trợ GET và PUT profile.
+
+### 🧪 Unit Tests
+- Viết mới `__test__/unit/api/user-profile.test.ts` gồm 6 test cases bắt tất cả các kịch bản lỗi 401, 404, 400 và success 200.
+- Sửa lại các mock trong `recipes.test.ts` để tương thích với `NextRequest` và `searchRecipes`.
+- Tổng cộng 28/28 tests passed. Kết quả đã lưu tại `experience/api-test-results-p2.md`.
+
+
+## [0.4.2] — 2026-05-18 — Feature & Testing: Cookbook Backend Layer & Tests
+
+### 📚 Backend Layer — Cookbook Management
+- Hoàn thành `Backend/schemas/cookbook.schema.ts` với `CreateCookbookSchema` và `UpdateCookbookSchema`.
+- Viết `Backend/services/cookbook.service.ts` chứa các hàm xử lý dữ liệu cho Cookbook (CRUD, và Thêm/Xoá Recipe khỏi Cookbook) kèm với xác thực quyền sở hữu (`userId`).
+
+### 🧪 Unit Tests cho Cookbook Service
+- Hoàn thành bộ unit test cho `cookbook.service.ts` tại `Backend/__test__/unit/services/cookbook.service.test.ts`.
+- Bổ sung cấu hình `vitest.config.ts` để Vitest có thể nhận diện path alias (e.g. `@/backend/`).
+- Tổng cộng 11 test cases đã **PASS**.
+
+### 🌐 API Layer — Cookbook Management
+- Xây dựng các API Routes: `GET/POST /api/cookbooks`, `GET/PUT/DELETE /api/cookbooks/[id]`, và `POST/DELETE /api/cookbooks/[id]/recipes`.
+- Tuân thủ kiến trúc Thin Router, tái sử dụng `CreateCookbookSchema` hiệu quả (không yêu cầu `userId` từ body, tự inject từ Clerk `auth()`).
+
+### 🧪 Unit Tests cho Cookbook API
+- Viết 13 test cases cho 3 API Endpoints của Cookbook.
+- Cover đầy đủ status codes (200, 201, 400, 401, 404).
+- Cải thiện thiết kế API: Hỗ trợ linh hoạt đọc tham số `recipeId` thông qua `JSON body` hoặc `searchParams` cho method `DELETE`.
+
+---
+
+## [0.4.1] — 2026-05-18 — Feature & Testing: API Endpoints & Unit Tests
+
+### 🚀 API Endpoints Implemented
+Đã khởi tạo các API Endpoints (Thin Router) cho dự án dựa trên `FLOW.md` và `01-Agent-api-endpoint.md`:
+- `GET & POST /api/recipes`: Lấy danh sách và tạo mới recipe.
+- `GET & PUT & DELETE /api/recipes/[id]`: Chi tiết, cập nhật và xóa recipe.
+- `POST /api/ai/analyze-image`: Mock endpoint cho AI Orchestrator.
+- `POST /api/webhooks/clerk`: Đồng bộ user từ Clerk xuống database nội bộ.
+
+### 🧪 Unit Tests & Bugfixes
+Đã viết và thực thi Unit Tests bằng Vitest cho toàn bộ các API Endpoints trên. Quá trình test đã phát hiện và xử lý các lỗi:
+- **Lỗi 400 Bad Request:** Thiếu `userId` trong request body. Cố định bằng cách lấy `userId` trực tiếp từ middleware Clerk `auth()` và inject vào object body trước khi qua Zod Validation.
+- **Lỗi Module Resolution:** Vitest không map được đường dẫn `@/app`. Đã fix bằng cách chuyển các import từ absolute paths sang relative paths (ví dụ: `../../../app/api/...`) trong file test.
+- **Tài liệu:** Đã đúc kết bài học tại file `experience/api-endpoints-testing.md` và cung cấp Prompt mới cho Prompt Engineer.
+
+---
+
 ## [0.4.0] — 2026-05-18 — feat: P0-2 + P1 Core Features UI hoàn chỉnh
 
 ### 🎨 Frontend Layer — [AGENT-UI]
