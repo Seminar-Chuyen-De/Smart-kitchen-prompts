@@ -351,4 +351,39 @@ TUẦN 5 — Production
 
 ---
 
-> **Cập nhật lần cuối**: 2026-05-16 | **Version**: 1.0.0
+> **Cập nhật lần cuối**: 2026-05-19 | **Version**: 1.1.0
+
+---
+
+## 🐛 BUG LOG — Lỗi Đã Gặp
+
+### BUG-001 · Prisma v7 Breaking Change — `url` trong `datasource` không còn hỗ trợ
+
+| Trường        | Thông tin                                             |
+| ------------- | ----------------------------------------------------- |
+| **Ngày**      | 2026-05-19                                            |
+| **Severity**  | 🔴 Critical (Blocking — không generate được client)  |
+| **Agent**     | `[AGENT-DB]`                                          |
+| **Status**    | ⏳ Pending Fix                                        |
+
+**Error Message từ terminal:**
+```
+Error: Prisma schema validation - (get-config wasm)
+Error code: P1012
+error: The datasource property `url` is no longer supported
+  -->  prisma\schema.prisma:10
+   |
+ 9 |   provider = "postgresql"
+10 |   url      = env("DATABASE_URL")
+   |
+Prisma CLI Version : 7.8.0
+```
+
+**Root Cause:**
+Khi chạy `npm i --save-dev prisma@latest`, Prisma đã nhảy từ **v5 lên v7.8.0** — đây là major version upgrade với **breaking changes**. Trong Prisma v7, cấu hình `datasource` (bao gồm `url`) đã được **di chuyển ra khỏi `schema.prisma`** sang file cấu hình riêng `prisma.config.ts`.
+
+**Fix cần thực hiện** (xem Actionable Prompt bên dưới):
+- Downgrade Prisma về v5 (stable, tương thích với schema hiện tại), **HOẶC**
+- Migrate lên Prisma v7 đúng cách: tạo `prisma.config.ts` và cập nhật `schema.prisma`
+
+---
