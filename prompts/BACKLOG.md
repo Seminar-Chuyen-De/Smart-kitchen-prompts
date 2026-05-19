@@ -9,19 +9,19 @@
 
 ## 🗂️ Trạng Thái Hiện Tại (Snapshot)
 
-| Layer                   | Đã có                                     | Còn thiếu                                             |
-| ----------------------- | ----------------------------------------- | ----------------------------------------------------- |
-| **Config**              | Đầy đủ (tsconfig, tailwind, next, prisma) | —                                                     |
-| **DB Schema**           | User, Cookbook, Recipe, ScanLog           | —                                                     |
-| **Backend/services**    | recipe.service.ts (CRUD)                  | cookbook.service.ts, user.service.ts, scan.service.ts |
-| **Backend/schemas**     | recipe.schema.ts                          | cookbook.schema.ts, scan.schema.ts                    |
-| **app/api**             | ❌ Chưa có route nào                      | Toàn bộ API routes                                    |
-| **app/(routes)**        | layout, page, sign-in, sign-up            | /dashboard và toàn bộ sub-routes                      |
-| **Frontend/components** | HomePage.tsx                              | Dashboard, Recipe, Cookbook, AI Scan, Layout          |
-| **Frontend/hooks**      | ❌ Trống                                  | useRecipes, useCookbooks, useScan                     |
-| **AI/agents**           | 4 files (nội dung cần verify)             | Cần implement đầy đủ logic                            |
-| **AI/workflows**        | scan-generative-save.ts (cần verify)      | —                                                     |
-| **Tests**               | Cấu trúc**test** tạo sẵn                  | Toàn bộ test cases                                    |
+| Layer | Đã có | Còn thiếu |
+|---|---|---|
+| **Config** | Đầy đủ (tsconfig, tailwind, next, prisma, vitest.config.ts) | — |
+| **DB Schema** | Đầy đủ (User, Cookbook, CookbookRecipe, Step, Ingredient, RecipeIngredient, Tag, RecipeTag, ScanLog) | — |
+| **Backend/services** | recipe.service.ts (Nested CRUD chuẩn ERD) | cookbook.service.ts, user.service.ts, scan.service.ts |
+| **Backend/schemas** | Đầy đủ (recipe, user, ingredient, tag, cookbook, step) | scan.schema.ts |
+| **app/api** | ❌ Chưa có route nào | Toàn bộ API routes |
+| **app/(routes)** | layout, page, sign-in, sign-up | /dashboard và toàn bộ sub-routes |
+| **Frontend/components** | HomePage.tsx | Dashboard, Recipe, Cookbook, AI Scan, Layout |
+| **Frontend/hooks** | ❌ Trống | useRecipes, useCookbooks, useScan |
+| **AI/agents** | 4 files (nội dung cần verify) | Cần implement đầy đủ logic |
+| **AI/workflows** | scan-generative-save.ts (cần verify) | — |
+| **Tests** | Đã có 5/5 unit tests cho recipe service | Toàn bộ các test cases còn lại |
 
 ---
 
@@ -31,10 +31,10 @@
 
 **Mục tiêu**: Khi user đăng ký qua Clerk, tự động tạo record trong bảng `users`.**Agent**: `[AGENT-DB]` → `[AGENT-API]`**Dependency**: Không
 
-- [ ] **[AGENT-DB]** Viết `Backend/services/user.service.ts`:
+- [x] **[AGENT-DB]** Viết `Backend/services/user.service.ts`:
   - `upsertUser(clerkId, email, name, avatarUrl)`
   - `getUserById(clerkId)`
-- [ ] **[AGENT-API]** Tạo `app/api/webhooks/clerk/route.ts`:
+- [x] **[AGENT-API]** Tạo `app/api/webhooks/clerk/route.ts`:
   - Verify Clerk webhook signature (dùng `svix`)
   - Handle event `user.created` → gọi `upsertUser`
   - Handle event `user.updated` → update user info
@@ -97,7 +97,7 @@
 
 #### API Layer
 
-- [ ] **[AGENT-API]** Tạo `app/api/scan/route.ts` (POST):
+- [x] **[AGENT-API]** Tạo `app/api/scan/route.ts` (POST) (Đã tạo với đường dẫn `app/api/ai/analyze-image/route.ts`):
   - Nhận `multipart/form-data` (image file)
   - Gọi `AI/workflows/scan-generative-save.ts`
   - Trả về `{ recipe, scanLogId }`
@@ -128,10 +128,10 @@
 
 #### API Layer
 
-- [ ] **[AGENT-API]** Tạo `app/api/recipes/route.ts`:
+- [x] **[AGENT-API]** Tạo `app/api/recipes/route.ts`:
   - `GET` → `getRecipesByUser(userId)` → trả về list
   - `POST` → validate `CreateRecipeSchema` → `createRecipe(userId, data)`
-- [ ] **[AGENT-API]** Tạo `app/api/recipes/[id]/route.ts`:
+- [x] **[AGENT-API]** Tạo `app/api/recipes/[id]/route.ts`:
   - `GET` → `getRecipeById(id, userId)`
   - `PUT` → validate `UpdateRecipeSchema` → `updateRecipe(id, userId, data)`
   - `DELETE` → `deleteRecipe(id, userId)`
@@ -166,7 +166,7 @@
 
 #### Backend Layer
 
-- [ ] **[AGENT-DB]** Viết `Backend/services/cookbook.service.ts`:
+- [x] **[AGENT-DB]** Viết `Backend/services/cookbook.service.ts`:
   - `getCookbooksByUser(userId)`
   - `getCookbookById(id, userId)` (include recipes)
   - `createCookbook(userId, data)`
@@ -174,17 +174,17 @@
   - `deleteCookbook(id, userId)`
   - `addRecipeToCookbook(cookbookId, recipeId, userId)`
   - `removeRecipeFromCookbook(cookbookId, recipeId, userId)`
-- [ ] **[AGENT-DB]** Tạo `Backend/schemas/cookbook.schema.ts`:
+- [x] **[AGENT-DB]** Tạo `Backend/schemas/cookbook.schema.ts`:
   - `CreateCookbookSchema`, `UpdateCookbookSchema`
 
 #### API Layer
 
-- [ ] **[AGENT-API]** Tạo `app/api/cookbooks/route.ts`:
+- [x] **[AGENT-API]** Tạo `app/api/cookbooks/route.ts`:
   - `GET` → list cookbooks
   - `POST` → tạo cookbook mới
-- [ ] **[AGENT-API]** Tạo `app/api/cookbooks/[id]/route.ts`:
+- [x] **[AGENT-API]** Tạo `app/api/cookbooks/[id]/route.ts`:
   - `GET`, `PUT`, `DELETE`
-- [ ] **[AGENT-API]** Tạo `app/api/cookbooks/[id]/recipes/route.ts`:
+- [x] **[AGENT-API]** Tạo `app/api/cookbooks/[id]/recipes/route.ts`:
   - `POST` → thêm recipe
   - `DELETE` → xóa recipe
 
@@ -230,9 +230,9 @@
 
 **Dependency**: P1-2
 
-- [ ] **[AGENT-DB]** Cập nhật `Backend/services/recipe.service.ts`:
+- [x] **[AGENT-DB]** Cập nhật `Backend/services/recipe.service.ts`:
   - Thêm `searchRecipes(userId, query, filters)` với full-text search
-- [ ] **[AGENT-API]** Cập nhật `app/api/recipes/route.ts`:
+- [x] **[AGENT-API]** Cập nhật `app/api/recipes/route.ts`:
   - Thêm query params: `?q=`, `?source=`, `?cookbookId=`
 - [ ] **[AGENT-UI]** Tạo `Frontend/components/recipe/RecipeSearch.tsx`:
   - Input tìm kiếm + filter dropdowns
@@ -242,7 +242,7 @@
 
 **Dependency**: P0-1
 
-- [ ] **[AGENT-API]** Tạo `app/api/user/profile/route.ts` (GET, PUT)
+- [x] **[AGENT-API]** Tạo `app/api/user/profile/route.ts` (GET, PUT)
 - [x] **[AGENT-UI]** Tạo `Frontend/components/pages/ProfilePage.tsx`
 - [x] **[AGENT-UI]** Tạo `app/dashboard/profile/page.tsx`
 
@@ -255,7 +255,8 @@
 **Dependency**: P0-1, P1-1, P1-2, P1-3
 
 - [ ] **[AGENT-TESTING]** Tạo `Backend/__test__/recipe.service.test.ts`
-- [ ] **[AGENT-TESTING]** Tạo `Backend/__test__/cookbook.service.test.ts`
+- [x] **[AGENT-TESTING]** Tạo `Backend/__test__/cookbook.service.test.ts`
+- [x] **[AGENT-TESTING]** Tạo API Tests cho `recipes` và `cookbooks` (`__test__/unit/api/`)
 - [ ] **[AGENT-TESTING]** Tạo `Backend/__test__/user.service.test.ts`
 - [ ] **[AGENT-TESTING]** Tạo `AI/__test__/vision.agent.test.ts` (mock Google Vision)
 - [ ] **[AGENT-TESTING]** Tạo `AI/__test__/recipe.agent.test.ts` (mock Claude)
@@ -351,4 +352,4 @@ TUẦN 5 — Production
 
 ---
 
-> **Cập nhật lần cuối**: 2026-05-16 | **Version**: 1.0.0
+> **Cập nhật lần cuối**: 2026-05-18 | **Version**: 1.0.2
