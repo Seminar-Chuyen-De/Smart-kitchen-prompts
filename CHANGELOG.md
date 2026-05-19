@@ -4,6 +4,77 @@
 
 ---
 
+## [0.5.0] — 2026-05-18 — feat: P2 UX Enhancement — Shared UI, Error Pages, Profile
+
+### 🔀 Git Workflow — [AGENT-GIT-WORKFLOW]
+
+**Mục tiêu**: Hợp nhất toàn bộ công việc đã làm trên các nhánh riêng lẻ vào một nhánh chức năng mới trước khi bắt đầu P2.
+
+| Nhánh nguồn | Nhánh đích | Nội dung |
+|---|---|---|
+| `origin/feature/database-schema` | `feature/p2-ux-enhancement` | DB schema, Zod schemas, seed, service layer |
+| `origin/feature/api-endpoints-tests` | `feature/p2-ux-enhancement` | API routes, unit tests, user.service |
+| `origin/feature/p0-p1-core-ui` | `feature/p2-ux-enhancement` | Toàn bộ P0-2 + P1 UI components |
+
+**Bonus fix**: Cập nhật `.gitignore` để loại `.next/`, `tsconfig.tsbuildinfo` và các build artifacts khỏi git tracking.
+
+---
+
+### 🎨 P2-1 · Shared UI Components — [AGENT-UI]
+
+**Mục tiêu**: Xây dựng bộ primitive UI components tái sử dụng làm nền tảng cho toàn bộ dashboard.
+
+| File | Mô tả |
+|---|---|
+| `Frontend/components/ui/Button.tsx` | 4 variants (primary/secondary/ghost/danger), 3 sizes, `isLoading` spinner, `leftIcon`/`rightIcon`, `forwardRef` |
+| `Frontend/components/ui/Badge.tsx` | 5 variants: `ai` (violet), `manual` (blue), `pending` (amber), `success` (green), `error` (red) |
+| `Frontend/components/ui/Skeleton.tsx` | 3 variants: `text`, `card`, `avatar` — animation pulse, prop `count` để render nhiều |
+| `Frontend/components/ui/EmptyState.tsx` | Icon + title + description + optional `action` button |
+| `Frontend/components/ui/Modal.tsx` | Backdrop blur, đóng bằng ESC/click-outside, 4 sizes (sm/md/lg/full), `aria-modal` |
+| `Frontend/components/ui/Toast.tsx` | Fixed bottom-right, slide-in animation, 4 loại có màu riêng, nút dismiss |
+| `Frontend/contexts/ToastContext.tsx` | `useReducer` state, auto-remove sau 4000ms, export `useToast()` hook và `ToastProvider` |
+
+**Tích hợp**: `app/dashboard/layout.tsx` được cập nhật để bọc `ToastProvider` + render `ToastContainer`.
+
+---
+
+### 🛡️ P2-2 · Error Handling & Loading States — [AGENT-UI]
+
+**Mục tiêu**: Cung cấp UX nhất quán khi xảy ra lỗi hoặc đang tải dữ liệu ở cấp ứng dụng.
+
+| File | Mô tả |
+|---|---|
+| `app/loading.tsx` | Global loading skeleton với thương hiệu Smart Kitchen (icon 🍳 + Skeleton component) |
+| `app/not-found.tsx` | 404 page: `UtensilsCrossed` icon, text "404", 2 navigation buttons (Dashboard / Trang chủ) |
+| `app/error.tsx` | Next.js Error Boundary (`'use client'`): nhận `error.digest`, nút "Thử lại" gọi `reset()` |
+
+---
+
+### 👤 P2-4 · User Profile Page — [AGENT-UI]
+
+**Mục tiêu**: Trang hồ sơ người dùng dùng dữ liệu từ Clerk, với stat cards và modal chỉnh sửa.
+
+| File | Mô tả |
+|---|---|
+| `Frontend/components/pages/ProfilePage.tsx` | Dùng `useUser()` Clerk: avatar, tên, email, ngày tham gia, stat cards (recipe/cookbook), edit Modal |
+| `app/dashboard/profile/page.tsx` | Thin shell + `export const metadata` |
+
+> **Ghi chú**: Stat cards hiển thị giá trị `0` với comment `// TODO: fetch từ /api/user/profile`. Form edit chưa submit API — chờ P2-4 API layer.
+
+---
+
+### 📋 Prompt Engineering
+
+- Thêm `prompts/p2-ux-enhancement-ui.md` — Actionable Prompt theo format `06-Agent-prompt.md`, gồm 2 phần:
+  - **PHẦN 1** — `[AGENT-UI]`: 3 bước thực thi với spec chi tiết từng component
+  - **PHẦN 2** — `[AGENT-GIT-WORKFLOW]`: Script merge 3 nhánh + script push cuối
+
+### ✅ Verification
+
+- Dev server `npm run dev` → **Chạy thành công**
+- `app/error.tsx`, `app/loading.tsx`, `app/not-found.tsx` → hiển thị trong `.next/app-build-manifest.json` ✅
+- `/dashboard/profile` → route render đúng với Clerk user data ✅
+- `ToastProvider` + `ToastContainer` tích hợp vào dashboard layout ✅
 ## [0.4.3] — 2026-05-18 — Feature & Testing: Search Recipes & User Profile (P2-3, P2-4)
 
 ### 🔍 Backend Layer — Search & Filter Recipes (P2-3)
