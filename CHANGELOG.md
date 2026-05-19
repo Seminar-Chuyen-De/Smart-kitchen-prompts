@@ -9,6 +9,7 @@
 ### 🐛 Bug Fixes & UX Enhancements — [AGENT-UI]
 - **Dashboard Hydration Mismatch**: Đã sửa lỗi hydration do sử dụng `Math.random()` trên Server Component. Tip bây giờ được xử lý qua `useEffect` trên client với hiệu ứng carousel tự động xoay 10 giây/lần.
 - **Recipe Data Fetching**: Xoá bỏ hoàn toàn dữ liệu giả (mock data) khỏi `useRecipes`. Thêm tính năng auto-fetch khi mount và xử lý lỗi đồng bộ với component để luôn hiển thị đúng trạng thái.
+- **Cookbook Data Fetching**: Xoá dữ liệu giả (mock data) khỏi `useCookbooks`, bổ sung auto-fetch khi mount, sửa lỗi dư thừa ở `CookbooksPage` và `CookbookDetail`, đồng thời bổ sung Error Banner xử lý khi gọi API lỗi.
 - **Recipes Page Refactor**: Xoá `useEffect` dư thừa và bổ sung Error Banner để hiển thị thông báo lỗi rõ ràng nếu API thất bại.
 
 ### 🛠 Backend & Scripts — [AGENT-DB]

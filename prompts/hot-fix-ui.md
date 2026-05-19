@@ -43,3 +43,11 @@ Thực hiện chuỗi các bản vá lỗi (hot fixes) và cải thiện trải 
 - **Giải pháp**:
   - Tạo thêm một script CLI tại `scripts/seed-recipes-for-user.ts`.
   - Hỗ trợ câu lệnh chạy thủ công: `npx tsx scripts/seed-recipes-for-user.ts <USER_ID>` để chèn công thức mẫu cho bất kỳ người dùng nào theo yêu cầu quản trị.
+
+### 6. Xoá Mock Data của Cookbook và Cập nhật Hook `useCookbooks`
+- **Vấn đề**: Tương tự như Recipes, Cookbook vẫn đang sử dụng `MOCK_COOKBOOKS` làm dữ liệu tạm, và gọi fetch dư thừa ở các components.
+- **Giải pháp**:
+  - Gỡ bỏ hoàn toàn `MOCK_COOKBOOKS` khỏi `useCookbooks`.
+  - Khởi tạo mặc định bằng mảng rỗng `[]` và tự động fetch (`useEffect`) ngay trong hook.
+  - Sửa `CookbooksPage.tsx` và `CookbookDetail.tsx` để xoá bỏ `useEffect` gọi fetch thủ công.
+  - Thêm Error Banner vào trang danh sách Cookbooks để hiển thị trạng thái lỗi nếu API gặp sự cố.
