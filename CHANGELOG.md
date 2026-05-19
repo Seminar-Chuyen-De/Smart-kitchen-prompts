@@ -4,6 +4,19 @@
 
 ---
 
+## [0.5.1] — 2026-05-19 — fix: UI Hotfixes & Default Recipes Seeding
+
+### 🐛 Bug Fixes & UX Enhancements — [AGENT-UI]
+- **Dashboard Hydration Mismatch**: Đã sửa lỗi hydration do sử dụng `Math.random()` trên Server Component. Tip bây giờ được xử lý qua `useEffect` trên client với hiệu ứng carousel tự động xoay 10 giây/lần.
+- **Recipe Data Fetching**: Xoá bỏ hoàn toàn dữ liệu giả (mock data) khỏi `useRecipes`. Thêm tính năng auto-fetch khi mount và xử lý lỗi đồng bộ với component để luôn hiển thị đúng trạng thái.
+- **Recipes Page Refactor**: Xoá `useEffect` dư thừa và bổ sung Error Banner để hiển thị thông báo lỗi rõ ràng nếu API thất bại.
+
+### 🛠 Backend & Scripts — [AGENT-DB]
+- **Default Recipes Seeding Fix**: Cập nhật logic `seedDefaultRecipesForUser` để bao bọc các lời gọi tạo recipe trong khối `try/catch`. Đã sửa lỗi tạo tự động một Cookbook mặc định ("📖 Công thức yêu thích") và gán tất cả 10 recipes vừa seed vào đó.
+- **Script Hỗ Trợ Mới**: Tạo script `scripts/seed-recipes-for-user.ts` cho phép khởi tạo 10 công thức và Cookbook mặc định cho một người dùng cũ bằng command line.
+
+---
+
 ## [0.5.0] — 2026-05-18 — feat: P2 UX Enhancement — Shared UI, Error Pages, Profile
 
 ### 🔀 Git Workflow — [AGENT-GIT-WORKFLOW]
