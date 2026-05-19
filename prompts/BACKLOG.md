@@ -135,6 +135,10 @@
   - `GET` → `getRecipeById(id, userId)`
   - `PUT` → validate `UpdateRecipeSchema` → `updateRecipe(id, userId, data)`
   - `DELETE` → `deleteRecipe(id, userId)`
+- [x] **[AGENT-API]** Tạo các APIs phụ trợ (Steps, Ingredients, Tags) theo ERD:
+  - `/api/recipes/[id]/steps` (GET, POST, PUT, DELETE)
+  - `/api/ingredients` (GET, POST) và `/api/recipes/[id]/ingredients` (POST, DELETE)
+  - `/api/tags` (GET, POST) và `/api/recipes/[id]/tags` (POST, DELETE)
 
 #### Frontend Layer
 
@@ -231,9 +235,9 @@
 **Dependency**: P1-2
 
 - [x] **[AGENT-DB]** Cập nhật `Backend/services/recipe.service.ts`:
-  - Thêm `searchRecipes(userId, query, filters)` với full-text search
+  - Thêm `searchRecipes(userId, query, filters)` với full-text search và pagination
 - [x] **[AGENT-API]** Cập nhật `app/api/recipes/route.ts`:
-  - Thêm query params: `?q=`, `?source=`, `?cookbookId=`
+  - Thêm query params: `?q=`, `?source=`, `?cookbookId=`, `?page=`, `?limit=`
 - [ ] **[AGENT-UI]** Tạo `Frontend/components/recipe/RecipeSearch.tsx`:
   - Input tìm kiếm + filter dropdowns
 - [ ] **[AGENT-UI]** Cập nhật `useRecipes.ts` — thêm search/filter state
@@ -257,6 +261,7 @@
 - [ ] **[AGENT-TESTING]** Tạo `Backend/__test__/recipe.service.test.ts`
 - [x] **[AGENT-TESTING]** Tạo `Backend/__test__/cookbook.service.test.ts`
 - [x] **[AGENT-TESTING]** Tạo API Tests cho `recipes` và `cookbooks` (`__test__/unit/api/`)
+- [x] **[AGENT-TESTING]** Cập nhật toàn bộ Unit Test để tương thích cấu trúc Integer ID & ERD mới (29 passed, 9 skipped).
 - [ ] **[AGENT-TESTING]** Tạo `Backend/__test__/user.service.test.ts`
 - [ ] **[AGENT-TESTING]** Tạo `AI/__test__/vision.agent.test.ts` (mock Google Vision)
 - [ ] **[AGENT-TESTING]** Tạo `AI/__test__/recipe.agent.test.ts` (mock Claude)
@@ -352,4 +357,4 @@ TUẦN 5 — Production
 
 ---
 
-> **Cập nhật lần cuối**: 2026-05-18 | **Version**: 1.0.2
+> **Cập nhật lần cuối**: 2026-05-19 | **Version**: 1.0.3

@@ -4,6 +4,43 @@
 
 ---
 
+## [0.5.0] — 2026-05-19 — Feature: Align Database Schema & APIs with ERD (P1)
+
+### 🗄️ Database Layer — Prisma Schema
+- Tái cấu trúc toàn bộ `prisma/schema.prisma` để khớp 100% với `ERD.md`.
+- Chuyển đổi ID từ `String` sang `Int` (autoincrement) cho hầu hết các model.
+- Thêm các bảng quan hệ N:M: `RecipeIngredient`, `RecipeTag`, `CookbookRecipe`.
+- Thêm các bảng: `Step`, `Ingredient`, `Tag`.
+- Xóa các trường JSON (`ingredients`, `instructions`) khỏi bảng `Recipe` cũ.
+
+### ⚙️ Backend Layer — Schemas & Services
+- Cập nhật toàn bộ `user`, `recipe`, `cookbook` schemas và services để dùng `number` id.
+- Tạo mới schemas và services cho `Step`, `Ingredient`, `Tag` bao gồm các hàm CRUD và liên kết bảng phụ (junction tables).
+
+### 🌐 API Layer — Thin Router
+- Cập nhật các API cũ chuyển đổi `params.id` sang `Number`.
+- Tạo mới các Endpoint hỗ trợ CRUD thực thể liên kết:
+  - `GET/POST /api/recipes/[id]/steps`, `PUT/DELETE /api/recipes/[id]/steps/[stepId]`
+  - `GET/POST /api/ingredients`, `POST/DELETE /api/recipes/[id]/ingredients`
+  - `GET/POST /api/tags`, `POST/DELETE /api/recipes/[id]/tags`
+
+### 🧪 Testing
+- Cập nhật toàn bộ Mock Data trong các file `*.test.ts` (đổi `title` thành `recipesName`, update `userId` cho webhook).
+- Thêm `describe.todo` cho 9 file test ảo thuộc P3 để tránh lỗi runner.
+- Kết quả: **29/29 Passed**, 9 Skipped. Đã lưu lịch sử tại `experience/api-schema-update.md`.
+
+---
+
+## [0.4.4] — 2026-05-19 — Feature: Pagination for Search Recipes (P2-3)
+
+### 📄 Backend Layer — Recipe Service & API
+- Bổ sung tham số `page` và `limit` vào hàm `searchRecipes` trong `Backend/services/recipe.service.ts` để hỗ trợ phân trang (dùng `skip` và `take`).
+- Thay đổi cấu trúc trả về của `searchRecipes` thành `{ data, meta: { total, page, limit, totalPages } }`.
+- Cập nhật API route `app/api/recipes/route.ts` trích xuất `page` và `limit` từ Search Params (mặc định 1 và 10).
+- Đánh dấu hoàn thành task và cập nhật file `BACKLOG.md`.
+
+---
+
 ## [0.4.3] — 2026-05-18 — Feature & Testing: Search Recipes & User Profile (P2-3, P2-4)
 
 ### 🔍 Backend Layer — Search & Filter Recipes (P2-3)
