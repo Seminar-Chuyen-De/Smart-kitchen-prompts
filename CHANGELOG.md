@@ -4,6 +4,14 @@
 
 ---
 
+## [0.5.2] — 2026-05-19 — fix: Tự động tải lại UI và tối ưu Loading State khi thêm công thức vào Cookbook
+
+### 🐛 Bug Fixes & UX Enhancements — [AGENT-UI]
+- **Cookbook Recipe List Hydration**: Sửa lỗi danh sách công thức trong trang `cookbook[id]` không tự động cập nhật sau khi người dùng thêm công thức mới qua AddRecipe Modal. Đã bổ sung logic gọi lại `fetchCookbooks()` ngay sau khi gọi API thành công để tải lại dữ liệu mà không cần refresh trình duyệt.
+- **Button Loading State**: Thêm hiệu ứng loading vòng xoay (`Loader2`) và vô hiệu hóa nút bấm tương ứng trong Modal AddRecipe khi đang xử lý thêm công thức vào cookbook, giúp UX mượt mà và trực quan hơn.
+
+---
+
 ## [0.5.1] — 2026-05-19 — fix: UI Hotfixes & Default Recipes Seeding
 
 ### 🐛 Bug Fixes & UX Enhancements — [AGENT-UI]
