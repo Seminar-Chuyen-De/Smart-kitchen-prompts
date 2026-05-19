@@ -9,19 +9,19 @@
 
 ## 🗂️ Trạng Thái Hiện Tại (Snapshot)
 
-| Layer                   | Đã có                                     | Còn thiếu                                             |
-| ----------------------- | ----------------------------------------- | ----------------------------------------------------- |
-| **Config**              | Đầy đủ (tsconfig, tailwind, next, prisma) | —                                                     |
-| **DB Schema**           | User, Cookbook, Recipe, ScanLog           | —                                                     |
-| **Backend/services**    | recipe.service.ts (CRUD)                  | cookbook.service.ts, user.service.ts, scan.service.ts |
-| **Backend/schemas**     | recipe.schema.ts                          | cookbook.schema.ts, scan.schema.ts                    |
-| **app/api**             | ❌ Chưa có route nào                      | Toàn bộ API routes                                    |
-| **app/(routes)**        | layout, page, sign-in, sign-up            | /dashboard và toàn bộ sub-routes                      |
-| **Frontend/components** | HomePage.tsx                              | Dashboard, Recipe, Cookbook, AI Scan, Layout          |
-| **Frontend/hooks**      | ❌ Trống                                  | useRecipes, useCookbooks, useScan                     |
-| **AI/agents**           | 4 files (nội dung cần verify)             | Cần implement đầy đủ logic                            |
-| **AI/workflows**        | scan-generative-save.ts (cần verify)      | —                                                     |
-| **Tests**               | Cấu trúc**test** tạo sẵn                  | Toàn bộ test cases                                    |
+| Layer | Đã có | Còn thiếu |
+|---|---|---|
+| **Config** | Đầy đủ (tsconfig, tailwind, next, prisma, vitest.config.ts) | — |
+| **DB Schema** | Đầy đủ (User, Cookbook, CookbookRecipe, Step, Ingredient, RecipeIngredient, Tag, RecipeTag, ScanLog) | — |
+| **Backend/services** | recipe.service.ts (Nested CRUD chuẩn ERD) | cookbook.service.ts, user.service.ts, scan.service.ts |
+| **Backend/schemas** | Đầy đủ (recipe, user, ingredient, tag, cookbook, step) | scan.schema.ts |
+| **app/api** | ❌ Chưa có route nào | Toàn bộ API routes |
+| **app/(routes)** | layout, page, sign-in, sign-up | /dashboard và toàn bộ sub-routes |
+| **Frontend/components** | HomePage.tsx | Dashboard, Recipe, Cookbook, AI Scan, Layout |
+| **Frontend/hooks** | ❌ Trống | useRecipes, useCookbooks, useScan |
+| **AI/agents** | 4 files (nội dung cần verify) | Cần implement đầy đủ logic |
+| **AI/workflows** | scan-generative-save.ts (cần verify) | — |
+| **Tests** | Đã có 5/5 unit tests cho recipe service | Toàn bộ các test cases còn lại |
 
 ---
 
