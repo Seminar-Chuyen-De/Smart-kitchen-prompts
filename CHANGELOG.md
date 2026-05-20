@@ -4,6 +4,62 @@
 
 ---
 
+## [0.6.0] — 2026-05-20 — feat: P3 Chỉnh sửa công thức tự tạo (Edit User Recipe)
+
+### 🎨 Frontend Layer — [AGENT-UI]
+
+**Mục tiêu**: Thêm chức năng chỉnh sửa công thức do người dùng tự tạo (`source_type === "MANUAL"`). Công thức `AI_GENERATED` bị vô hiệu hóa nút sửa. Tái sử dụng `RecipeForm` với `initialData`, không tạo component mới.
+
+| File | Hành động | Mô tả |
+|---|---|---|
+| `Frontend/components/recipe/RecipeCard.tsx` | MODIFY | Nút ✏️ trong hover overlay: `disabled` + `opacity-40 cursor-not-allowed` nếu `source_type === "AI_GENERATED"` |
+| `Frontend/components/recipe/RecipeDetail.tsx` | MODIFY | Layout 2 nút đối xứng ở đầu trang: `[← Quay lại danh sách]` và `[✏️ Chỉnh sửa công thức]`, render nút sửa theo `onEdit` prop |
+| `Frontend/components/recipe/RecipeForm.tsx` | MODIFY | Populate `ingredients[]` và `steps[]` từ `initialData` với lazy initializer; thêm `ingredient_id?` vào `FormIngredient` để preserve ID khi edit |
+| `Frontend/components/pages/RecipeDetailPage.tsx` | MODIFY | Thêm `showEditConfirm` state, `isEditable` logic (`source_type === "MANUAL"`), confirm dialog trước khi navigate |
+| `Frontend/components/pages/RecipesPage.tsx` | MODIFY | Thêm `editTarget` state, `handleEdit` handler có guard AI, confirm dialog cho nút edit từ danh sách |
+| `Frontend/components/pages/RecipeEditPage.tsx` | NEW | Page component cho edit: fetch recipe by ID, populate `RecipeForm`, gọi `updateRecipe`, redirect về chi tiết |
+| `app/dashboard/recipes/[id]/edit/page.tsx` | NEW | Route shell siêu mỏng → `RecipeEditPage` |
+
+**Flow hoạt động:**
+1. User hover `RecipeCard` (MANUAL) → nút ✏️ sáng → click → confirm dialog → `/dashboard/recipes/:id/edit`
+2. Hoặc từ `RecipeDetail` → nút "Chỉnh sửa công thức" ở navigation row → confirm dialog → `/dashboard/recipes/:id/edit`
+3. Edit page: form populate đủ dữ liệu (tên, nguyên liệu, bước nấu) → submit → redirect về chi tiết
+
+---
+
+### 🐛 Bug Fix — [AGENT-TESTING]
+
+**Lỗi**: Sau khi submit form chỉnh sửa, `ingredients` và `steps` **không được cập nhật vào DB** dù metadata (tên, mô tả) có thể được lưu.
+
+**Nguyên nhân (3 điểm)**:
+1. `RecipeEditPage.handleSubmit` chỉ truyền metadata vào `updateRecipe`, bỏ qua `ingredients[]` và `steps[]`
+2. `UpdateRecipeInput` type (useRecipes.ts) không có slot cho `ingredients`/`steps`
+3. `updateRecipe` hook gửi payload raw thay vì map sang camelCase + kiểu số đúng với Backend schema
+
+**Fix** — 3 file:
+
+| File | Thay đổi |
+|---|---|
+| `Frontend/components/recipe/RecipeForm.tsx` | Thêm `ingredient_id?: number` vào `FormIngredient`; preserve ID khi map từ `initialData.ingredients` |
+| `Frontend/hooks/useRecipes.ts` | Extend `UpdateRecipeInput`; sửa optimistic update (exclude ingredients/steps khỏi spread); build `apiPayload` camelCase với `ingredientId`, `stepNumber`, `time: Number` |
+| `Frontend/components/pages/RecipeEditPage.tsx` | Thêm `ingredients: data.ingredients` và `steps: data.steps` vào lời gọi `updateRecipe` |
+
+**Verification**: `npx tsc --noEmit` → 0 lỗi mới từ code edit recipe ✅
+
+> **Lưu ý**: Ingredient hoàn toàn mới (chưa có `ingredient_id`) chưa được hỗ trợ trong flow edit — bị filter bỏ. Chi tiết tại `experience/edit-recipe-not-saving.md`.
+
+---
+
+### 📋 Prompt Engineering — [AGENT-PROMPT-ENGINEER]
+
+| File | Mô tả |
+|---|---|
+| `prompts/p3-edit-user-recipe.md` | Actionable Prompt P3 đầy đủ: 5 bước thực thi, spec chi tiết từng component, constraints, test scenarios |
+| `prompts/p3-debug-edit-recipe-not-saving.md` | Debug prompt theo `skills/04-Agent-testing.md`: phân tích lỗi, hướng dẫn fix 3 file, lệnh verify, test scenarios |
+| `experience/edit-recipe-not-saving.md` | Bài học kinh nghiệm: nguyên nhân, cách fix, kết quả test, lưu ý |
+
+---
+
 ## [0.5.2] — 2026-05-19 — fix: Tự động tải lại UI và tối ưu Loading State khi thêm công thức vào Cookbook
 
 ### 🐛 Bug Fixes & UX Enhancements — [AGENT-UI]
