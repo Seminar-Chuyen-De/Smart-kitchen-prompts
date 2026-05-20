@@ -4,6 +4,42 @@
 
 ---
 
+## [1.0.0] — 2026-05-20 — refactor: Tái cấu trúc repository theo 4 vai trò dự án
+
+### 📋 Toàn bộ Repository — [AGENT-MANAGE] & [AGENT-PROMPT-ENGINEER]
+
+**Mục tiêu**: Tái cấu trúc toàn bộ tệp tin trong repository `Smart-kitchen-prompts` thành 4 thư mục vai trò cốt lõi đại diện cho 4 thành viên đội ngũ phát triển (Frontend, Backend, AI-training, và Manager-Documentation). Hành động này giúp tinh gọn việc truy xuất tri thức, phân quyền làm việc rõ ràng cho các AI Agents, và tăng tính chuyên nghiệp trong thiết kế hệ thống.
+
+**Sơ đồ cấu trúc mới:**
+*   **`Frontend/`**: Gom nhóm toàn bộ tài nguyên UI prompts (p1, p2, p3, hotfixes), skill card của UI Agent, và lịch sử gỡ lỗi client-side.
+*   **`Backend/`**: Gom nhóm sơ đồ lược đồ quan hệ thực thể DB (ERD), API endpoints, services, Clerk middleware, NextConfig và kết quả kiểm thử.
+*   **`AI-training/`**: Gom nhóm prompts trích xuất nguyên liệu, đề xuất công thức, skill card Prompt Engineer, kinh nghiệm xử lý rate limit và model switching.
+*   **`context/` (Giữ ở gốc ngoài cùng)**: Tri thức tối quan trọng toàn cục (`CLAUDE.md`, `AGENTS.md`, `FLOW.md`, `ERD.md`) được giữ nguyên ở gốc ngoài cùng để tất cả AI Agents bắt buộc phải đọc trước tiên khi khởi tạo.
+*   **`Manager-Documentation/`**: Gom nhóm backlogs, báo cáo tiến độ, git workflow, cấu hình MCP và tài liệu báo cáo seminar.
+
+**Thay đổi chi tiết:**
+
+| Loại thay đổi | Tệp tin & Đường dẫn mới |
+|---|---|
+| **NEW DIRECTORIES** | Khởi tạo 4 thư mục gốc: `Frontend/`, `Backend/`, `AI-training/`, `Manager-Documentation/` |
+| **context/ (Root)** | Giữ ở gốc ngoài cùng: `CLAUDE.md`, `AGENTS.md`, `FLOW.md` và `ERD.md` (từ Backend di chuyển ra) |
+| **Frontend/prompts/** | Di chuyển: `p1-ui-core-features.md`, `p2-ux-enhancement-ui.md`, `p3-edit-user-recipe.md`, `hot-fix-ui.md`, `hot-fix-UI-reload-after-using-function.md` |
+| **Frontend/skills/** | Di chuyển: `02-Agent-ui.md` |
+| **Frontend/experience/** | Di chuyển: `edit-recipe-not-saving.md` |
+| **Backend/skills/** | Di chuyển: `01-Agent-api-endpoint.md`, `04-Agent-testing.md`, `05-Agent-database-query.md` |
+| **Backend/experience/** | Di chuyển: `01-clerk-api-auth-deprecation.md`, `02-next-config-compilation-standard.md`, `03-zod-schema-relative-path-flexibility.md`, `api-endpoints-testing.md`, `api-test-results-p2.md`, `cookbook-api-test.md`, `cookbook-service-test.md`, `database-schema.md` |
+| **AI-training/skills/** | Di chuyển: `06-Agent-prompt.md` |
+| **AI-training/prompts/** | Di chuyển: các thư mục versioned `ingredient-extraction-prompt/` và `recipe-generation-prompt/` |
+| **AI-training/experience/** | Di chuyển: `ingredient-extraction-prompt/test.md`, `recipe-generation-prompt/test.md`, `04-gemini-rate-limits-and-model-switching.md` |
+| **Manager-Documentation/skills/** | Di chuyển: `03-Agent-Manage.md`, `07-Agent-git-workflow.md` |
+| **Manager-Documentation/mcp-config/** | Di chuyển: toàn bộ cấu hình `mcp-config/` (`mcp.json`, `Instruction.md`) |
+| **Manager-Documentation/prompts/** | Di chuyển: `BACKLOG.md`, `backlog-analysis.md`, `readme-documentation.md`, `report-writing-prompt.md`, `vibe-coding-agents-application.md`, `vibe-coding-prompts-log.md`, và thư mục báo cáo `report/` |
+| **ROOT MODIFICATIONS** | Cập nhật `README.md` (giải thích cấu trúc mới) và `CHANGELOG.md` (ghi nhận refactoring v1.0.0) |
+
+**Xác minh**: Toàn bộ files được di chuyển bằng `git mv` đảm bảo 100% lịch sử commit Git được bảo toàn thành công. Gốc thư mục được dọn sạch hoàn toàn các thư mục rỗng cũ.
+
+---
+
 ## [0.6.0] — 2026-05-20 — feat: P3 Chỉnh sửa công thức tự tạo (Edit User Recipe)
 
 ### 🎨 Frontend Layer — [AGENT-UI]
