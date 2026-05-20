@@ -1,185 +1,124 @@
 # 🍳 Smart Kitchen Prompts
 
-> **Context Engineering Repository** — Não bộ của hệ thống Multi-Agent Smart Kitchen VN.
-> Repo này **không chứa code chạy được**. Nó quản lý ngữ cảnh, kỹ năng, và prompt templates cho toàn bộ hệ thống AI.
+> **Context Engineering Repository** — Não bộ & Ngữ cảnh học thuật của hệ thống Multi-Agent Smart Kitchen VN.
+> Repo này **không chứa code chạy được**. Nó quản lý ngữ cảnh, kỹ năng, các Actionable Prompt, và bài học kinh nghiệm cho toàn bộ hệ thống AI.
 
 ---
 
-## 🎯 Mục Đích
+## 🎯 Bản Đồ Vai Trò & Cấu Trúc Repository
 
-`smart-kitchen-prompts` là nơi tập trung toàn bộ **tri thức ngữ cảnh (context knowledge)** của dự án Smart Kitchen VN, được thiết kế để:
-
-| Đối tượng | Mục đích |
-|---|---|
-| 🤖 **AI Agent** | Đọc `context/` để nạp ngữ cảnh dự án trước khi làm việc |
-| 👨‍💻 **Developer** | Tra cứu skill cards để biết cách giao đúng task cho đúng agent |
-| 📝 **Prompt Engineer** | Thêm/cập nhật prompts và skills theo chuẩn Vibe Coding |
-
-> **Tại sao cần repo này?** Thay vì lặp lại context dự án trong mỗi cuộc hội thoại với AI, chúng ta lưu tất cả vào đây và AI chỉ cần đọc một lần để hiểu toàn bộ hệ thống.
-
----
-
-## 📁 Cấu Trúc Thư Mục
+Repository này được cấu trúc lại hoàn chỉnh theo quy trình làm việc thực tế của một **Đội ngũ phát triển 4 thành viên (Con người + AI Agents)**, giữ nguyên thư mục `context/` ở gốc ngoài cùng để làm điểm bắt đầu tối quan trọng cho mọi AI Agent nạp ngữ cảnh:
 
 ```
 smart-kitchen-prompts/
 │
-├── 📄 README.md              ← Bạn đang đọc file này
-├── 📄 CHANGELOG.md           ← Lịch sử thay đổi prompt/context (luôn cập nhật)
+├── 📄 README.md                     ← Bạn đang đọc file này
+├── 📄 CHANGELOG.md                  ← Ghi nhận lịch sử thay đổi (phiên bản v1.0.0)
 │
-├── 📂 context/               ← "ROM" của hệ thống — AI ĐỌC ĐẦU TIÊN
-│   ├── CLAUDE.md             ← ⭐ Global rules — AI đọc TRƯỚC TIÊN
-│   ├── AGENTS.md             ← Định nghĩa agents & kiến trúc MSA
-│   ├── ERD.md                ← Database schema (PostgreSQL, 8 bảng)
-│   └── FLOW.md               ← 5 luồng nghiệp vụ chính (user journeys)
+├── 📂 context/                      ← ⭐ ROM TỐI QUAN TRỌNG CỦA HỆ THỐNG — AI ĐỌC ĐẦU TIÊN
+│   ├── CLAUDE.md                    ← Hướng dẫn chung và cấu trúc tech stack toàn dự án
+│   ├── AGENTS.md                    ← Định nghĩa các AI Agents & kiến trúc Multi-Agent (MSA)
+│   ├── FLOW.md                      ← Sơ đồ và mô tả chi tiết 5 luồng nghiệp vụ cốt lõi
+│   └── ERD.md                       ← Bản thiết kế cơ sở dữ liệu quan hệ thực thể (8 bảng)
 │
-├── 📂 skills/                ← Skill cards: vai trò & quy tắc từng AI agent
-│   ├── 01-Agent-api-endpoint.md   ← [AGENT-API] Người gác cổng API
-│   ├── 02-Agent-ui.md             ← [AGENT-UI] Chuyên gia Frontend
-│   ├── 03-Agent-Manage.md         ← [AGENT-MANAGE] Tech Lead & Reviewer
-│   ├── 04-Agent-testing.md        ← [AGENT-TESTING] QA & Error Fixer
-│   ├── 05-Agent-database-query.md ← [AGENT-DB] Kiến trúc sư Dữ liệu
-│   └── 06-Agent-prompt.md         ← [AGENT-PROMPT-ENGINEER] Kỹ sư Phân tích YC
+├── 📂 Frontend/                     ← 🎨 Tài nguyên dành cho Frontend Developer
+│   ├── 📂 prompts/                  ← Prompts UI/UX, Core features (p1, p2, p3, hotfixes)
+│   ├── 📂 skills/                   ← Skill card: 02-Agent-ui.md
+│   └── 📂 experience/               ← Lịch sử & giải pháp sửa lỗi giao diện client
 │
-├── 📂 prompts/               ← Actionable prompts đã được tinh chỉnh
-│   ├── ingredient-extraction-prompt/   ← v1.md → v2.md (versioned)
-│   ├── recipe-generation-prompt/
-│   └── readme-documentation.md        ← Prompt tạo file README này
+├── 📂 Backend/                      ← 🗄️ Tài nguyên dành cho Backend Developer & QA
+│   ├── 📂 skills/                   ← Skill cards: 01-Agent-api-endpoint.md, 04-Agent-testing.md, 05-Agent-database-query.md
+│   └── 📂 experience/               ← Lịch sử sửa lỗi DB, Clerk middleware, NextConfig và API testing
 │
-├── 📂 mcp-config/            ← Cấu hình MCP servers (PostgreSQL MCP + Context7)
-│   ├── mcp.json              ← Config file cho MCP client
-│   └── Instruction.md        ← Hướng dẫn cài đặt & kết nối MCP
+├── 📂 AI-training/                  ← 🧠 Tài nguyên dành cho AI Prompt Engineer
+│   ├── 📂 prompts/                  ← Versioned prompts: nhận diện nguyên liệu, gợi ý công thức (v1, v2, Eval)
+│   ├── 📂 skills/                   ← Skill card: 06-Agent-prompt.md (Kỹ sư Phân tích & Phác thảo Yêu cầu)
+│   └── 📂 experience/               ← Kết quả test prompts, giải pháp rate limits & model switching
 │
-└── 📂 experience/            ← Bài học kinh nghiệm, gotchas, best practices
+└── 📂 Manager-Documentation/        ← 📋 Tài nguyên dành cho Project Manager & Tech Writer
+    ├── 📂 prompts/                  ← Backlogs, báo cáo tiến độ, viết báo cáo Word (seminar 5 chương)
+    ├── 📂 skills/                   ← Skill cards: 03-Agent-Manage.md, 07-Agent-git-workflow.md
+    └── 📂 mcp-config/               ← Cấu hình kết nối Model Context Protocol (mcp.json, Instruction.md)
 ```
 
 ---
 
-## 🤖 Hướng Dẫn Sử Dụng — Dành cho AI Agent
+## 📁 Chi Tiết Phân Phối Tệp Tin Theo Vai Trò
 
-### Thứ tự đọc file bắt buộc
+### ⭐ 0. Global Context Layer (ROM hệ thống)
+*Thư mục tối quan trọng nằm tại gốc ngoài cùng để mọi AI-Skill khi khởi chạy đều bắt buộc phải đọc trước tiên để nắm bắt toàn cảnh cấu trúc, tech stack, sơ đồ database và nghiệp vụ cốt lõi của Smart Kitchen VN.*
+*   `context/CLAUDE.md`: Global rules quy định tech stack, cấu trúc 3 thư mục cứng (`Frontend/`, `Backend/`, `AI/`), và quy tắc viết mã.
+*   `context/AGENTS.md`: Thiết kế và phân chia nhiệm vụ cho 4 Agents trong hệ thống Multi-Agent (MSA).
+*   `context/FLOW.md`: Mô tả chi tiết 5 luồng hoạt động chính (AI Scan, Manual Form, Cookbook, Clerk Auth, Search & Filter) kèm danh sách APIs.
+*   `context/ERD.md`: Bản thiết kế cơ sở dữ liệu quan hệ thực thể (8 bảng PostgreSQL, kho dữ liệu chính).
 
-Khi bắt đầu một phiên làm việc mới, AI **PHẢI** đọc theo thứ tự sau:
+### 🎨 1. Frontend Developer (UI/UX & Client Logic)
+*Chịu trách nhiệm thiết kế giao diện React/Next.js, hiệu ứng hoạt hoạt ảnh, custom hooks, đồng bộ dữ liệu client, và xử lý các hotfix hiển thị.*
+*   `Frontend/prompts/p1-ui-core-features.md`: Thiết lập giao diện trang chủ, scan ảnh, danh sách món ăn.
+*   `Frontend/prompts/p2-ux-enhancement-ui.md`: Thêm loading state, thông báo toast, trang cá nhân (profile).
+*   `Frontend/prompts/p3-edit-user-recipe.md`: Biểu mẫu chỉnh sửa chi tiết món ăn.
+*   `Frontend/prompts/hot-fix-ui.md`: Sửa lỗi hiển thị UI.
+*   `Frontend/prompts/hot-fix-UI-reload-after-using-function.md`: Sửa lỗi đồng bộ giao diện sau khi trigger hàm.
+*   `Frontend/skills/02-Agent-ui.md`: **[AGENT-UI]** - Chuyên gia viết mã giao diện React và CSS Tailwind.
+*   `Frontend/experience/edit-recipe-not-saving.md`: Bài học kinh nghiệm xử lý lỗi form edit recipe không đồng bộ payload.
 
-```
-1. context/CLAUDE.md    → Global rules (đọc TRƯỚC TIÊN, không bỏ qua)
-2. context/AGENTS.md    → Kiến trúc MSA & STRICT 3-FOLDER RULE
-3. context/ERD.md       → Schema DB (khi làm task liên quan đến dữ liệu)
-4. context/FLOW.md      → Luồng nghiệp vụ (khi làm feature mới)
-5. skills/{agent}.md    → Quy tắc cụ thể cho role hiện tại
-```
+### 🗄️ 2. Backend Developer & QA (Data, Security & Server Routing)
+*Chịu trách nhiệm thiết kế schema PostgreSQL, truy vấn Prisma, xác thực Clerk, API route thin controller, và thực hiện kiểm thử an toàn/hiệu năng.*
+*   `Backend/skills/01-Agent-api-endpoint.md`: **[AGENT-API]** - Viết route controller mỏng đảm bảo an toàn biên dịch.
+*   `Backend/skills/05-Agent-database-query.md`: **[AGENT-DB]** - Truy vấn cơ sở dữ liệu Prisma an toàn.
+*   `Backend/skills/04-Agent-testing.md`: **[AGENT-TESTING]** - QA/QC chạy lệnh verify và viết log kinh nghiệm gỡ lỗi.
+*   `Backend/experience/01-clerk-api-auth-deprecation.md`: Khắc phục lỗi deprecation cú pháp hàm `auth()` của Clerk Middleware v5.
+*   `Backend/experience/02-next-config-compilation-standard.md`: Chuẩn hóa tệp tin cấu hình NextConfig mjs trong môi trường TS.
+*   `Backend/experience/03-zod-schema-relative-path-flexibility.md`: Khắc phục lỗi validate Zod schema chặn đường dẫn ảnh nội bộ tương đối.
+*   `Backend/experience/database-schema.md`: Lịch sử thiết kế và đồng bộ database.
+*   `Backend/experience/*testing.md` & `*test.md`: Nhật ký kiểm thử API, Cookbook service, và kết quả kiểm thử pha P2.
 
-### Nguyên tắc khi làm việc
+### 🧠 3. AI-training (Prompt Engineer & LLM Pipeline Integrator)
+*Chịu trách nhiệm tối ưu hóa prompt hệ thống, tinh chỉnh pipeline trích xuất nguyên liệu từ ảnh chụp, cấu trúc logic tạo công thức nấu ăn, và xây dựng cơ chế dự phòng API.*
+*   `AI-training/skills/06-Agent-prompt.md`: **[AGENT-PROMPT-ENGINEER]** - Kỹ sư dịch ý tưởng thành Actionable Prompt chuẩn.
+*   `AI-training/prompts/ingredient-extraction-prompt/`: Thư mục prompts versioned + file đánh giá (Eval) nhận diện nguyên liệu.
+*   `AI-training/prompts/recipe-generation-prompt/`: Thư mục prompts versioned + file đánh giá (Eval) gợi ý món ăn.
+*   `AI-training/experience/ingredient-extraction-prompt/test.md`: Kết quả test trích xuất nhãn ảnh (label detection).
+*   `AI-training/experience/recipe-generation-prompt/test.md`: Kết quả test đề xuất công thức.
+*   `AI-training/experience/04-gemini-rate-limits-and-model-switching.md`: Giải pháp xử lý lỗi API rate limits (429) và cơ chế chuyển đổi thông minh giữa Gemini 2.5 Flash và 1.5 Flash.
 
-- ✅ **Luôn** tham chiếu `context/` trước khi đề xuất giải pháp.
-- ✅ **Hoạt động đúng vai** — mỗi agent chỉ được phép hoạt động trong phạm vi skill card của mình.
-- ✅ **Vibe Coding cycle**: Analyse → Code → Test (xong bước nào báo cho user test trước khi làm tiếp).
-- ❌ **Không bịa đặt** thông tin về schema, tech stack, hay kiến trúc — chỉ dựa vào `context/`.
-
----
-
-## 👨‍💻 Hướng Dẫn Sử Dụng — Dành cho Developer
-
-### Cách giao task đúng cách
-
-**Bước 1**: Copy skill card tương ứng vào đầu cuộc hội thoại với AI:
-```
-# Ví dụ: Giao task tạo API mới
-→ Copy toàn bộ nội dung `skills/01-Agent-api-endpoint.md` vào prompt đầu tiên
-→ Sau đó mô tả task cần làm
-```
-
-**Bước 2**: Nếu task chưa rõ ràng, dùng `06-Agent-prompt.md` để refine trước:
-```
-→ Copy `skills/06-Agent-prompt.md` + mô tả ý tưởng mơ hồ
-→ AI sẽ sinh ra Actionable Prompt chuẩn cho bạn copy đi dùng
-```
-
-### Cách thêm skill mới
-
-1. Tạo file mới trong `skills/` theo format: `{số thứ tự}-Agent-{tên}.md`
-2. Cấu trúc file phải bao gồm:
-   - `# ROLE: [AGENT-TÊN] - Mô tả vai trò`
-   - `# QUY TẮC BẮT BUỘC (STRICT RULES):`
-   - `# QUY TRÌNH THỰC THI (VIBE CODING):`
-3. Cập nhật `CHANGELOG.md` với entry mới.
-
-### Cách thêm/cập nhật prompt
-
-- Mỗi feature/chức năng có **một thư mục riêng** trong `prompts/`
-- Dùng versioning: `v1.md`, `v2.md`, ... khi prompt được cải tiến
-- Prompt phải theo format Actionable Prompt chuẩn (xem `skills/06-Agent-prompt.md`)
+### 📋 4. Manager & Documentation (PM, Architect & Tech Writer)
+*Chịu trách nhiệm quản lý tiến độ backlog, quy định quy trình làm việc nhóm, cấu hình MCP để mở rộng tri thức AI, và soạn thảo báo cáo học thuật.*
+*   `Manager-Documentation/prompts/BACKLOG.md`: Bảng quản lý 80+ đầu việc cần làm (chia theo thứ tự P0 -> P3).
+*   `Manager-Documentation/prompts/backlog-analysis.md`: Prompt phân tích mã nguồn để tự động gen ra backlog.
+*   `Manager-Documentation/prompts/readme-documentation.md`: Prompt sinh tệp README gốc này.
+*   `Manager-Documentation/prompts/report-writing-prompt.md`: Prompt sinh tài liệu báo cáo seminar.
+*   `Manager-Documentation/prompts/report/`: Bản thảo báo cáo seminar 5 chương (từ Tổng quan đến Kết luận).
+*   `Manager-Documentation/prompts/vibe-coding-agents-application.md`: Báo cáo ứng dụng thực tế Multi-Agent System môn Vibe Coding.
+*   `Manager-Documentation/prompts/vibe-coding-prompts-log.md`: Nhật ký hội thoại (Prompts Log) minh chứng quy trình Vibe Coding.
+*   `Manager-Documentation/skills/03-Agent-Manage.md`: **[AGENT-MANAGE]** - Giám sát cấu trúc folder và review Pull Request.
+*   `Manager-Documentation/skills/07-Agent-git-workflow.md`: **[AGENT-GIT-WORKFLOW]** - Quản lý nhánh, commit chuẩn Conventional, và đẩy code.
+*   `Manager-Documentation/mcp-config/`: Cấu hình kết nối cổng database/Context7 MCP.
 
 ---
 
-## 🧠 Multi-Agent System — Tóm Tắt
+## 🤖 Hướng Dẫn Sử Dụng Dành Cho AI Agent
 
-| Agent | Role | Phạm vi hoạt động |
-|---|---|---|
-| `[AGENT-API]` | Người gác cổng API | `app/api/` — Thin Router ≤20 dòng |
-| `[AGENT-UI]` | Chuyên gia Frontend | `Frontend/components/`, `Frontend/hooks/` |
-| `[AGENT-MANAGE]` | Tech Lead & Reviewer | Kiểm soát kiến trúc toàn dự án |
-| `[AGENT-TESTING]` | QA & Error Fixer | Debug, fix lỗi, verify |
-| `[AGENT-DB]` | Kiến trúc sư Dữ liệu | `Backend/services/`, `Backend/schemas/`, `prisma/` |
-| `[AGENT-PROMPT-ENGINEER]` | Kỹ sư Phân tích YC | Chuyển idea → Actionable Prompt |
+Khi bắt đầu một phiên làm việc mới, AI **PHẢI** nạp ngữ cảnh dự án theo đúng thứ tự ưu tiên:
 
-### Orchestrator Flow (thứ tự gọi agents cho một feature mới)
-
-```
-[AGENT-PROMPT-ENGINEER]  →  [AGENT-DB]  →  [AGENT-API]  →  [AGENT-UI]
-       Refine idea            Schema &         Thin          UI &
-       thành prompt           Service          Router        Hooks
-                                    ↕
-                           [AGENT-TESTING]  ←  Review mọi bước
-                           [AGENT-MANAGE]   ←  Giám sát kiến trúc
-```
+1. Đọc tệp cấu trúc toàn cục ở gốc ngoài cùng: `context/CLAUDE.md`.
+2. Đọc kiến trúc MSA để hiểu cách phối hợp: `context/AGENTS.md`.
+3. Tùy thuộc vào phân vùng công việc được giao, truy cập vào thư mục tương ứng (Frontend / Backend / AI-training / Manager-Documentation) để đọc các tài liệu hướng dẫn (`skills/`) và các bài học kinh nghiệm (`experience/`) để tránh lặp lại các bug cũ.
 
 ---
 
-## 📐 Quy Ước & Quy Tắc
+## 👨‍💻 Hướng Dẫn Sử Dụng Dành Cho Developer
 
-### Naming Convention
-
-| Loại file | Quy ước | Ví dụ |
-|---|---|---|
-| Skill card | `{số}-Agent-{tên}.md` | `01-Agent-api-endpoint.md` |
-| Prompt | `{feature-name}.md` | `ingredient-extraction-prompt/v2.md` |
-| Context | `ALL_CAPS.md` | `AGENTS.md`, `ERD.md` |
-
-### Cập nhật CHANGELOG
-
-Sau mỗi lần thêm/sửa file trong repo này, **bắt buộc** thêm entry vào `CHANGELOG.md`:
-```markdown
-## [X.Y.Z] — YYYY-MM-DD — Mô tả ngắn
-
-### Loại thay đổi
-- Chi tiết thay đổi
-```
-
-Phiên bản tăng theo quy tắc:
-- **Patch** (`0.0.x`): Sửa lỗi typo, cập nhật nhỏ
-- **Minor** (`0.x.0`): Thêm skill/prompt mới
-- **Major** (`x.0.0`): Thay đổi kiến trúc agent, refactor lớn
-
----
-
-## 🔗 Các Repo Liên Quan
-
-| Repo | Mô tả | Quan hệ |
-|---|---|---|
-| `smart-kitchen-vn` | React Native mobile app | Consumer của API |
-| `smart-kitchen-api` | Express.js REST API + Prisma | Backend chính, chứa `schema.prisma` gốc |
-| `smart-kitchen-web` | Next.js 14 web app | Frontend chính, áp dụng context từ repo này |
-| `smart-kitchen-ai-main` | AI agent implementations | Implement MSA được định nghĩa trong `context/AGENTS.md` |
-
-> **Lưu ý**: File `context/ERD.md` trong repo này được sync từ `smart-kitchen-api/prisma/schema.prisma`. Khi schema DB thay đổi, cần cập nhật `ERD.md` và thêm entry vào `CHANGELOG.md`.
+### Quy trình Vibe Coding chuẩn hóa:
+1. **Bước 1 (Phân tích)**: Sử dụng kỹ sư phân tích `AI-training/skills/06-Agent-prompt.md` để chuyển đổi ý tưởng thô sơ của bạn thành **Actionable Prompt** chi tiết.
+2. **Bước 2 (Thực thi)**: Gửi Actionable Prompt cho các Agent chuyên môn (`Backend/skills/...`, `Frontend/skills/...`, `AI-training/skills/...`) để viết code lớp Schema, Service, API routes và UI Components theo đúng thứ tự.
+3. **Bước 3 (Kiểm thử & Bàn giao)**: Dùng QA Agent `Backend/skills/04-Agent-testing.md` để test, ghi kinh nghiệm sửa lỗi vào `experience/` nếu có, và dùng `Manager-Documentation/skills/07-Agent-git-workflow.md` để checkout nhánh và push PR lên GitHub.
 
 ---
 
 <div align ="center">
 
-**Smart Kitchen VN** — *AI-powered cooking, made simple.*
-
-`context/` → `skills/` → `prompts/` → **Code**
+**Smart Kitchen VN** — *Hệ thống Multi-Agent nấu ăn thông minh hàng đầu.*
+*Quy chuẩn - Chuyên nghiệp - Hiệu suất cao.*
 
 </div>
